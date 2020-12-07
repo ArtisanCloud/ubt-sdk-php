@@ -3,11 +3,11 @@
 
 namespace ArtisanCloud\UBT\Providers;
 
-use ArtisanCloud\UBT\Facades\UBTFacade;
 use ArtisanCloud\UBT\UBT;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 
-class UBTProvider extends ServiceProvider
+class UBTServiceProvider extends ServiceProvider
 {
     /**
      * 注册服务.
@@ -15,8 +15,9 @@ class UBTProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(UBT::class, function ($app) {
-            return new UBT(config('ubt.driver'));
+        //
+        App::bind('ubt',function() {
+            return new UBT(env('','file'));
         });
     }
 
@@ -26,9 +27,6 @@ class UBTProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-        App::bind('UBT',function() {
-            return new UBTFacade();
-        });
+
     }
 }
