@@ -11,15 +11,17 @@ use Psr\Log\LogLevel;
 class AMQPDriver implements Driver
 {
 
-    public $streamHandler;
+    protected $streamHandler;
 
     /**
      * AMQPDriver constructor.
-     * @param Logger $logger
+     * 
      * @param LineFormatter $formatter
      * @param int $LOG_LEVEL
+     * 
+     * @return mixed
      */
-    public function __construct(Logger $logger, LineFormatter $formatter, int $LOG_LEVEL)
+    public function __construct( LineFormatter $formatter, int $LOG_LEVEL)
     {
         $exchangeName = env('UBT_AMQP_EXCHANGE', 'exchange-ubt-logs');
         $queueName = env('UBT_AMQP_QUEUE', 'queue-ubt-logs');
@@ -49,6 +51,11 @@ class AMQPDriver implements Driver
 
         $this->streamHandler = new AmqpHandler($channel, $exchangeName, $LOG_LEVEL);
         $this->streamHandler->setFormatter($formatter);
-        $logger->pushHandler($this->streamHandler);
+
+        return $this;
+    }
+    public function getHandler()
+    {
+        return $this->streamHandler;
     }
 }

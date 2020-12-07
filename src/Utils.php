@@ -8,19 +8,6 @@ use Monolog\Logger;
 class Utils
 {
 
-    static function getConfig() {
-        $config = config('ubt');
-        if (!$config) {
-            global $config;
-            $config = [
-                "appName" => env("APP_NAME", 'ubt-app-name'),
-                "appVersion" => 'unknown',
-                "logLevel" => env("UBT_LOG_LEVEL", 'debug'),
-            ];
-        }
-        return $config;
-    }
-
     static function isNoEnvProduction() {
         return
             env('APP_ENV') === 'dev' ||

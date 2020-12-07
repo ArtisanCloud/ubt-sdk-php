@@ -10,11 +10,26 @@ use Monolog\Logger;
 
 class FileDriver implements Driver
 {
+    protected $streamHandler;
 
-    public function __construct(Logger $logger, LineFormatter $formatter, int $LOG_LEVEL)
+    /**
+     * FileDriver constructor.
+     *
+     * @param LineFormatter $formatter
+     * @param int $LOG_LEVEL
+     *
+     * @return mixed
+     */
+    public function __construct(LineFormatter $formatter, int $LOG_LEVEL)
     {
-        $streamHandler = new RotatingFileHandler(storage_path() . '/logs/ubt-redis.log', 7, $LOG_LEVEL);
-        $streamHandler->setFormatter($formatter);
-        $logger->pushHandler($streamHandler);
+        $this->streamHandler = new RotatingFileHandler(storage_path() . '/logs/ubt-redis.log', 7, $LOG_LEVEL);
+        $this->streamHandler->setFormatter($formatter);
+
+        return $this;
+    }
+
+    public function getHandler()
+    {
+        return $this->streamHandler;
     }
 }

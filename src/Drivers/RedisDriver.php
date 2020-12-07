@@ -13,11 +13,29 @@ use Psr\Log\LogLevel;
 
 class RedisDriver implements Driver
 {
+    protected $redisHandler;
 
-    public function __construct(Logger $logger, LineFormatter $formatter, int $LOG_LEVEL)
+    /**
+     * RedisDriver constructor.
+     *
+     * @param LineFormatter $formatter
+     * @param int $LOG_LEVEL
+     *
+     * @return mixed
+     * 
+     */
+    public function __construct(LineFormatter $formatter, int $LOG_LEVEL)
     {
-        $redisHandler = new RedisHandler(new Client(env('UBT_REDIS')), "ubt-logs", $LOG_LEVEL);
-        $redisHandler->setFormatter($formatter);
-        $logger->pushHandler($redisHandler);
+        $this->redishandler = new RedisHandler(new Client(env('UBT_REDIS')), "ubt-logs", $LOG_LEVEL);
+        $this->redishandler->setFormatter($formatter);
+
+        return $this;
+
     }
+
+    public function getHandler()
+    {
+        return $this->redishandler;
+    }
+
 }
