@@ -60,7 +60,7 @@ class UBT
             'appName' => config('ubt.appName'),
             'appVersion' => config('ubt.appVersion'),
             'serverHostname' => gethostname(),
-            "ubtVersion" => config('ubt.ubtVersion')
+            "ubtVersion" => UBT_VERSION,
         ];
 
         $this->LOG_LEVEL = config('ubt.logLevel', 'DEBUG');
@@ -82,8 +82,12 @@ class UBT
         switch ($driverName) {
             case "redis":
                 $this->driver = new RedisDriver($this->formatter, $logLevel);
+                break;
+
             case "amqp":
                 $this->driver = new AMQPDriver($this->formatter, $logLevel);
+                break;
+                
             default:
                 $this->driver = new FileDriver($this->formatter, $logLevel);
         }
@@ -115,32 +119,32 @@ class UBT
 
     public function notice($msg, $json = [])
     {
-        self::base('notice', $msg, $json);
+        $this->base('notice', $msg, $json);
     }
 
     public function warning($msg, $json = [])
     {
-        self::base('warning', $msg, $json);
+        $this->base('warning', $msg, $json);
     }
 
     public function error($msg, $json = [])
     {
-        self::base('error', $msg, $json);
+        $this->base('error', $msg, $json);
     }
 
     public function critical($msg, $json = [])
     {
-        self::base('critical', $msg, $json);
+        $this->base('critical', $msg, $json);
     }
 
     public function alert($msg, $json = [])
     {
-        self::base('alert', $msg, $json);
+        $this->base('alert', $msg, $json);
     }
 
     public function emergency($msg, $json = [])
     {
-        self::base('emergency', $msg, $json);
+        $this->base('emergency', $msg, $json);
     }
 
     public function sendError(\Throwable $e)
@@ -153,8 +157,6 @@ class UBT
             'error.line' => $e->getLine()
         ]);
     }
-
-
 
 
 }

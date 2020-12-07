@@ -16,9 +16,11 @@ class UBTServiceProvider extends ServiceProvider
     public function register()
     {
         //
-        App::bind('ubt',function() {
-            return new UBT(env('','file'));
+        $this->app->singleton('ubt', function () {
+            return new UBT(env('UBT_DRIVER', 'file'));
         });
+
+        include_once(__DIR__ . '/../config/config.php');
     }
 
     /**
@@ -27,6 +29,8 @@ class UBTServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
+//        $ubt1 = $this->app->make('ubt');
+//        $ubt2 = $this->app->make('ubt');
+//        dd($ubt1 === $ubt2);
     }
 }
