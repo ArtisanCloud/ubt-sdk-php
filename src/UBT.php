@@ -38,7 +38,12 @@ class UBT
             $this->initLogger();
 //            dd($this->logger);
 
-            $this->installDriver($driver);
+
+            // install the default file driver first
+            $this->installDriver();
+            if ($driver !== 'file')
+                // keep the customer driver
+                $this->installDriver($driver);
 //            dd($this->driver, $this->logger);
 
         } catch (Throwable $exception) {
@@ -87,7 +92,7 @@ class UBT
             case "amqp":
                 $this->driver = new AMQPDriver($this->formatter, $logLevel);
                 break;
-                
+
             default:
                 $this->driver = new FileDriver($this->formatter, $logLevel);
         }
